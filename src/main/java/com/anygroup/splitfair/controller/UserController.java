@@ -1,8 +1,10 @@
 package com.anygroup.splitfair.controller;
 
+import com.anygroup.splitfair.dto.Auth.FirebaseTokenRequest;
 import com.anygroup.splitfair.dto.UserDTO;
 import com.anygroup.splitfair.enums.UserStatus;
 import com.anygroup.splitfair.service.UserService;
+import com.anygroup.splitfair.util.FirebaseTokenUtil;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.core.io.UrlResource;
@@ -50,6 +52,29 @@ public class UserController {
         UserDTO created = userService.createUser(dto);
         return ResponseEntity.ok(created);
     }
+
+    @PostMapping("/google")
+    public ResponseEntity<UserDTO> createUserFromFirebase(
+            @RequestBody FirebaseTokenRequest request
+    ) {
+
+        var decoded = FirebaseTokenUtil.verify(request.getToken());
+
+        String email = decoded.getEmail();
+        String name = decoded.getName();
+        String avatar = decoded.getPicture();
+
+        UserDTO dto = new UserDTO();
+        dto.setEmail(email);
+        dto.setName(name);
+        dto.setAvatar(avatar);
+        dto.setStatus(UserStatus.ACTIVE);
+
+        UserDTO created = userService.createUser(dto);
+
+        return ResponseEntity.ok(created);
+    }
+
 
 
     @PutMapping("/{id}")

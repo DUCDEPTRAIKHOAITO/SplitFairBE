@@ -2,12 +2,10 @@ server:
   port: 8080
 
 spring:
-  application:
-    name: splitfair
   datasource:
-    url: jdbc:mysql://localhost:3306/splitfair?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-    username: root
-    password: Minhduc1311
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -28,8 +26,8 @@ spring:
 # JWT config
 app:
   jwt:
-    secret: SplitwiseSuperSecretKeyForJWT!ChangeMe
-    expirationMs: 86400000
+    secret: ${JWT_SECRET}
+    expirationMs: ${JWT_EXPIRATION_MS:86400000}
 
   file:
     storage-location: ./data/images

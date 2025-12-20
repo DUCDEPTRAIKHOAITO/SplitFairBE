@@ -45,6 +45,14 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Firebase Admin SDK (verify Firebase ID Token) -->
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>9.2.0</version>
+        </dependency>
+
+
         <!-- Spring Security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
