@@ -27,18 +27,17 @@ public class User {
     @Column(nullable = false, unique = true, length = 250)
     private String email;
 
-    @Column(nullable = true) // Đổi từ false sang true
+    @Column(nullable = true)
     private String password;
 
     private String avatar;
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private UserStatus status = UserStatus.ACTIVE; //  giữ mặc định khi build
+    private UserStatus status = UserStatus.ACTIVE;
 
     @Builder.Default
-    private Instant createdTime = Instant.now(); //  giữ thời gian khi build
-
+    private Instant createdTime = Instant.now();
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;

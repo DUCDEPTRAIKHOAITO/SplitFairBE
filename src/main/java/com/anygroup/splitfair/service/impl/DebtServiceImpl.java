@@ -48,7 +48,7 @@ public class DebtServiceImpl implements DebtService {
         return debtMapper.toDTO(debt);
     }
 
-    // Tạo nợ thủ công (hiếm khi dùng)
+    // Tạo nợ thủ công
     @Override
     public DebtDTO createDebt(DebtDTO dto) {
         Debt debt = debtMapper.toEntity(dto);
@@ -78,7 +78,7 @@ public class DebtServiceImpl implements DebtService {
         debtRepository.deleteById(id);
     }
 
-    // Helper method to find or create a settlement bill
+
     private Bill getOrCreateSettlementBill(Group group, User payer, User payee, BigDecimal amountToAdd) {
         // 1. Tìm các Bill thanh toán trong ngày của Payer trong Group này
         java.time.Instant startOfDay = java.time.LocalDate.now().atStartOfDay(java.time.ZoneId.systemDefault()).toInstant();
@@ -184,7 +184,7 @@ public class DebtServiceImpl implements DebtService {
         return debtMapper.toDTO(debt);
     }
     
-    //thêm
+
     @Override
     @Transactional
     public void markBatchAsSettled(List<UUID> debtIds) {
@@ -310,12 +310,12 @@ public class DebtServiceImpl implements DebtService {
             UUID userId = entry.getKey();
             BigDecimal amount = entry.getValue();
 
-            // ✅ Lấy tên người dùng đúng cách
+            //  Lấy tên người dùng đúng cách
             String userName = userRepository.findById(userId)
                     .map(User::getUserName)
                     .orElse("Unknown User");
 
-            // ✅ Định dạng kết quả hiển thị
+            // Định dạng kết quả hiển thị
             if (amount.compareTo(BigDecimal.ZERO) < 0) {
                 readable.add(userName + " owes " + amount.abs() + " VND");
             } else if (amount.compareTo(BigDecimal.ZERO) > 0) {
@@ -340,7 +340,7 @@ public class DebtServiceImpl implements DebtService {
         return debts.stream().map(debtMapper::toDTO).collect(Collectors.toList());
     }
 
-    //// HÀM MỚI (Helper):
+
     @Override
     public List<BalanceDTO> getNetBalancesByGroup(UUID groupId) {
         

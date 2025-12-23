@@ -22,7 +22,7 @@ public interface ExpenseShareMapper {
     })
     ExpenseShareDTO toDTO(ExpenseShare entity);
 
-    // DTO → Entity không map expenseId nữa để tránh lỗi transient)
+    // DTO → Entity
     @Mappings({
             // @Mapping(source = "expenseId", target = "expense.id"),  // bỏ đi
             @Mapping(source = "userId", target = "user.id")

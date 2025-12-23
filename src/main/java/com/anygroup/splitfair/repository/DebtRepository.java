@@ -16,10 +16,10 @@ import java.util.UUID;
 @Repository
 public interface DebtRepository extends JpaRepository<Debt, UUID> {
 
-    // Tìm các khoản nợ mà user này nợ người khác
+
     List<Debt> findByAmountFrom(User fromUser);
 
-    // Tìm các khoản nợ mà người khác nợ user này
+
     List<Debt> findByAmountTo(User toUser);
 
     Optional<Debt> findByExpenseAndAmountFromAndAmountTo(Expense expense, User from, User to);
@@ -29,7 +29,7 @@ public interface DebtRepository extends JpaRepository<Debt, UUID> {
 
     List<Debt> findByExpense_Bill_Group_IdAndStatus(UUID groupId, DebtStatus status);
 
-    // Xóa các khoản nợ liên quan đến một expense cụ thể
+
     void deleteByExpense_Id(UUID expenseId);
     @Query("SELECT d FROM Debt d WHERE d.amountFrom = :fromUser AND d.amountTo = :toUser " +
            "AND d.expense.bill.group.id = :groupId AND d.status = 'UNSETTLED' " +

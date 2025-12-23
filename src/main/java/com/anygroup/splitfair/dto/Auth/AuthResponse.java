@@ -9,7 +9,7 @@ public class AuthResponse {
     private String token;
     private String userName;
     private String role;
-    // thêm userId vào AuthResponse
+
     private UUID userId;
     private String email;
     private String avatar;

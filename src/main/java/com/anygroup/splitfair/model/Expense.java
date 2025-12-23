@@ -38,18 +38,18 @@ public class Expense {
     @JoinColumn(name = "paid_by")
     private User paidBy;
 
-    // ✅ Quan hệ 1-N với Debt
+
     @OneToMany(mappedBy = "expense", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Debt> debts = new ArrayList<>();
 
-    // ✅ Quan hệ 1-N với ExpenseShare
+
     @OneToMany(mappedBy = "expense", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ExpenseShare> shares = new ArrayList<>();
 
     @OneToMany(mappedBy = "expense", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Attachment> attachments = new ArrayList<>();
 
-    // ====== FIELDS ======
+
 
     private String description;
     private BigDecimal amount;

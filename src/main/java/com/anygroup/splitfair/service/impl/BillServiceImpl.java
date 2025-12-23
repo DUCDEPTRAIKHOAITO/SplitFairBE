@@ -31,10 +31,10 @@ public class BillServiceImpl implements BillService {
     public BillDTO createBill(BillDTO dto) {
         Bill bill = billMapper.toEntity(dto);
 
-        // Mặc định: Bill mới tạo chưa có Expense → tổng tiền = 0
+
         bill.setTotalAmount(BigDecimal.ZERO);
 
-        //Nếu status chưa có, gán DRAFT
+
         if (bill.getStatus() == null) {
             bill.setStatus(BillStatus.DRAFT);
         }

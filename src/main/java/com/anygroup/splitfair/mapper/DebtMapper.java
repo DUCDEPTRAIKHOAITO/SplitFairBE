@@ -37,13 +37,13 @@ public interface DebtMapper {
         return "Nhóm không xác định";
     }
 
-    // DTO → Entity
+
     @Mapping(source = "expenseId", target = "expense.id")
     @Mapping(source = "fromUserId", target = "amountFrom", qualifiedByName = "mapUserFromId")
     @Mapping(source = "toUserId", target = "amountTo", qualifiedByName = "mapUserFromId")
     Debt toEntity(DebtDTO dto);
 
-    // Custom mapper để ánh xạ UUID → User
+
     @Named("mapUserFromId")
     default User mapUserFromId(UUID id) {
         if (id == null) return null;

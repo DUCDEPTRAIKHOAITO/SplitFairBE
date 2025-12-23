@@ -10,5 +10,5 @@ import java.util.UUID;
 public class BalanceDTO {
     private UUID userId;
     private String userName;
-    private BigDecimal netAmount; // Số âm là nợ, số dương là được trả
+    private BigDecimal netAmount;
 }

@@ -11,9 +11,9 @@ import java.util.UUID;
 @Repository
 public interface GroupRepository extends JpaRepository<Group, UUID> {
 
-    // Tìm tất cả group mà user này tạo
+
     List<Group> findByCreatedBy(User createdBy);
 
-    // Tìm group theo tên (cho phép search gần đúng)
+
     List<Group> findByGroupNameContainingIgnoreCase(String groupName);
 }

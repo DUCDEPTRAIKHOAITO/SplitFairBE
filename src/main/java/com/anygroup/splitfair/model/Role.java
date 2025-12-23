@@ -19,7 +19,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Enumerated(EnumType.STRING) // Lưu RoleType dưới dạng text ("ADMIN", "USER")
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true, length = 100)
     private RoleType name;
 }

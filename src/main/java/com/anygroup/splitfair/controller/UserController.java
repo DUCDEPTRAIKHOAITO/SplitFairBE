@@ -85,7 +85,7 @@ public class UserController {
         return ResponseEntity.ok(updated);
     }
 
-    // Tìm kiếm user theo tên hoặc email (không phân biệt hoa thường)
+
     @GetMapping("/search")
     public ResponseEntity<List<UserDTO>> searchUsers(@RequestParam("query") String query) {
         return ResponseEntity.ok(userService.searchUsers(query));

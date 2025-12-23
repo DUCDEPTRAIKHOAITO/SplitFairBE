@@ -20,7 +20,7 @@ public interface GroupMapper {
     @Mapping(source = "createdBy", target = "createdBy", qualifiedByName = "mapUserFromId")
     Group toEntity(GroupDTO dto);
 
-    // Hàm custom ánh xạ UUID → User
+
     @Named("mapUserFromId")
     default User mapUserFromId(UUID id) {
         if (id == null) return null;

@@ -16,16 +16,16 @@ import java.util.UUID;
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, UUID> {
 
-    // Lấy các expense theo bill
+
     List<Expense> findByBill(Bill bill);
 
-    // Lấy các expense mà user đã tạo
+
     List<Expense> findByCreatedBy(User user);
 
-    // Lấy các expense mà user đã thanh toán
+
     List<Expense> findByPaidBy(User paidBy);
 
-    // Thống kê tổng số tiền mỗi user  trong một group (ĐÃ ÁP DỤNG BỘ LỌC ẨN PAYMENT)
+
     @Query("SELECT new com.anygroup.splitfair.dto.PaymentStatDTO(e.paidBy.userName, SUM(e.amount)) " +
            "FROM Expense e " +
            "WHERE e.bill.group.id = :groupId " +

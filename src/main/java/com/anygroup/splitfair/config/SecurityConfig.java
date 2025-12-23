@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-// *** 1. THÊM CÁC IMPORT NÀY VÀO ***
+
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -33,11 +33,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                // *** 2. KÍCH HOẠT CORS ***
+
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 
                 .authorizeHttpRequests(auth -> auth
-                        // Cho phép login/register không cần xác thực
+
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/auth/account").authenticated()
 
@@ -45,12 +45,12 @@ public class SecurityConfig {
 
 
 
-                        // ✅ Cho phép ADMIN hoặc LEADER xóa expense
+
                         .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/expenses/**")
                         .hasAnyAuthority("ADMIN", "LEADER")
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/users/avatar/**").permitAll()
 
-                        // ✅ Các API khác yêu cầu đăng nhập
+
                         .requestMatchers("/api/expenses/**",
                                 "/api/bills/**",
                                 "/api/groups/**",
@@ -70,7 +70,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // *** 3. THÊM BEAN CẤU HÌNH CORS NÀY VÀO ***
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -92,7 +92,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
     
-    // (BẮT BUỘC) Thêm Bean này để AuthServiceImpl có thể inject AuthenticationManager
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

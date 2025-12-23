@@ -22,7 +22,7 @@ public class Notification {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user; // Receiver
+    private User user;
 
     @Column(nullable = false)
     private String title;
@@ -33,7 +33,7 @@ public class Notification {
     @Enumerated(EnumType.STRING)
     private NotificationType type;
 
-    private String referenceId; // ID of related object (Group, Expense, etc.)
+    private String referenceId;
 
     @Builder.Default
     private boolean isRead = false;
