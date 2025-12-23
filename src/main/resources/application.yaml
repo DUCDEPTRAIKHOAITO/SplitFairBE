@@ -39,6 +39,7 @@ spring:
           starttls:
             enable: true
 
+# abc
 app:
   jwt:
     secret: ${JWT_SECRET}
