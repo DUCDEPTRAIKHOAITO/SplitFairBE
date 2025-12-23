@@ -24,33 +24,38 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserRepository userRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+    ) throws ServletException, IOException {
 
         String path = request.getServletPath();
-        // 1. Bỏ qua cho các path public
-        if (path.contains("/api/auth/login") || path.contains("/api/auth/register") || path.contains("/api/auth/google")) {
+
+        // ✅ BỎ QUA TOÀN BỘ AUTH API
+        if (path.startsWith("/api/auth/")) {
             filterChain.doFilter(request, response);
             return;
         }
 
         String header = request.getHeader("Authorization");
+
         if (header == null || !header.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
         String token = header.substring(7);
+
         if (jwtUtil.validateToken(token)) {
             String email = jwtUtil.getEmailFromToken(token);
-            var optionalUser = userRepository.findByEmail(email);
 
-            if (optionalUser.isPresent()) {
-                var user = optionalUser.get();
-                var authority = new SimpleGrantedAuthority(user.getRole().getName().name());
+            userRepository.findByEmail(email).ifPresent(user -> {
+                var authority =
+                        new SimpleGrantedAuthority(user.getRole().getName().name());
 
-                // Đảm bảo mật khẩu không null cho Spring Security User
-                String password = user.getPassword() != null ? user.getPassword() : "PROTECTED";
+                String password =
+                        user.getPassword() != null ? user.getPassword() : "PROTECTED";
 
                 var authUser = new org.springframework.security.core.userdetails.User(
                         user.getEmail(), password, List.of(authority));
@@ -59,9 +64,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         authUser, null, authUser.getAuthorities());
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+            });
         }
 
         filterChain.doFilter(request, response);
     }
+
 }

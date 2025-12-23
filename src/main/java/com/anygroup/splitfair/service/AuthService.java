@@ -8,4 +8,7 @@ public interface AuthService {
     AuthResponse getAccount(String email);
     void changePassword(String email, ChangePasswordRequest request);
     AuthResponse loginWithGoogle(FirebaseTokenRequest request);
+    void forgotPassword(String email);
+    void resetPassword(String email, String otp, String newPassword);
+
 }

@@ -46,4 +46,21 @@ public class AuthController {
         authService.changePassword(email, request);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest request) {
+        authService.forgotPassword(request.getEmail());
+        return ResponseEntity.ok("OTP đã gửi về email");
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
+        authService.resetPassword(
+                request.getEmail(),
+                request.getOtp(),
+                request.getNewPassword()
+        );
+        return ResponseEntity.ok("Đổi mật khẩu thành công");
+    }
+
 }

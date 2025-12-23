@@ -43,6 +43,8 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/users/google").permitAll()
 
+
+
                         // ✅ Cho phép ADMIN hoặc LEADER xóa expense
                         .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/expenses/**")
                         .hasAnyAuthority("ADMIN", "LEADER")

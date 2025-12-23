@@ -5,12 +5,16 @@ import com.anygroup.splitfair.dto.Auth.ChangePasswordRequest;
 import com.anygroup.splitfair.dto.Auth.LoginRequest;
 import com.anygroup.splitfair.dto.Auth.RegisterRequest;
 import com.anygroup.splitfair.enums.RoleType;
+import com.anygroup.splitfair.model.PasswordResetToken;
 import com.anygroup.splitfair.model.Role;
 import com.anygroup.splitfair.model.User;
+import com.anygroup.splitfair.repository.PasswordResetTokenRepository;
 import com.anygroup.splitfair.repository.RoleRepository;
 import com.anygroup.splitfair.repository.UserRepository;
 import com.anygroup.splitfair.service.AuthService;
+import com.anygroup.splitfair.service.EmailService;
 import com.anygroup.splitfair.util.JwtUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,6 +32,9 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
+    private final EmailService emailService;
+
 
     private final JwtUtil jwtUtil;
 
@@ -166,4 +173,51 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Xác thực Google thất bại: " + e.getMessage());
         }
     }
+
+    @Override
+    @Transactional
+    public void forgotPassword(String email) {
+        userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Email không tồn tại"));
+
+        // Xóa OTP cũ (optional)
+        passwordResetTokenRepository.deleteByEmail(email);
+
+        String otp = String.valueOf(100000 + new java.util.Random().nextInt(900000));
+
+        PasswordResetToken token = new PasswordResetToken();
+        token.setEmail(email);
+        token.setOtp(otp);
+        token.setExpiresAt(java.time.Instant.now().plusSeconds(300)); // 5 phút
+        token.setUsed(false);
+
+        passwordResetTokenRepository.save(token);
+
+        emailService.sendOtp(email, otp);
+    }
+
+    @Override
+    public void resetPassword(String email, String otp, String newPassword) {
+        PasswordResetToken token = passwordResetTokenRepository
+                .findTopByEmailAndOtpOrderByExpiresAtDesc(email, otp)
+                .orElseThrow(() -> new RuntimeException("OTP không đúng"));
+
+        if (token.isUsed()) {
+            throw new RuntimeException("OTP đã được sử dụng");
+        }
+
+        if (token.getExpiresAt().isBefore(java.time.Instant.now())) {
+            throw new RuntimeException("OTP đã hết hạn");
+        }
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        token.setUsed(true);
+        passwordResetTokenRepository.save(token);
+    }
+
 }
