@@ -16,7 +16,7 @@
     <artifactId>splitfair</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>splitfair</name>
-    <description>App quản lý chi tiêu nhóm - SplitFair</description>
+    <description>SplitFair</description>
 
     <properties>
         <java.version>21</java.version>
